@@ -1,0 +1,978 @@
+
+Led_1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000004ba  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000a  00800060  000004ba  0000054e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000016  0080006a  0080006a  00000558  2**0
+                  ALLOC
+  3 .stab         000006b4  00000000  00000000  00000558  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000097  00000000  00000000  00000c0c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      0000002f  00000000  00000000  00000ca3  2**0
+                  CONTENTS, READONLY
+  6 .debug_aranges 000000b8  00000000  00000000  00000cd2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_info   00000603  00000000  00000000  00000d8a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 0000013f  00000000  00000000  0000138d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   0000029d  00000000  00000000  000014cc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_frame  000001e4  00000000  00000000  0000176c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    000001ef  00000000  00000000  00001950  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc    00000196  00000000  00000000  00001b3f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_ranges 000000a8  00000000  00000000  00001cd5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	21 c0       	rjmp	.+66     	; 0x46 <__bad_interrupt>
+   4:	ce c0       	rjmp	.+412    	; 0x1a2 <__vector_2>
+   6:	6e c1       	rjmp	.+732    	; 0x2e4 <__vector_3>
+   8:	1e c0       	rjmp	.+60     	; 0x46 <__bad_interrupt>
+   a:	1d c0       	rjmp	.+58     	; 0x46 <__bad_interrupt>
+   c:	1c c0       	rjmp	.+56     	; 0x46 <__bad_interrupt>
+   e:	1b c0       	rjmp	.+54     	; 0x46 <__bad_interrupt>
+  10:	1a c0       	rjmp	.+52     	; 0x46 <__bad_interrupt>
+  12:	19 c0       	rjmp	.+50     	; 0x46 <__bad_interrupt>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+
+0000001c <__do_copy_data>:
+  1c:	10 e0       	ldi	r17, 0x00	; 0
+  1e:	a0 e6       	ldi	r26, 0x60	; 96
+  20:	b0 e0       	ldi	r27, 0x00	; 0
+  22:	ea eb       	ldi	r30, 0xBA	; 186
+  24:	f4 e0       	ldi	r31, 0x04	; 4
+  26:	02 c0       	rjmp	.+4      	; 0x2c <__do_copy_data+0x10>
+  28:	05 90       	lpm	r0, Z+
+  2a:	0d 92       	st	X+, r0
+  2c:	aa 36       	cpi	r26, 0x6A	; 106
+  2e:	b1 07       	cpc	r27, r17
+  30:	d9 f7       	brne	.-10     	; 0x28 <__do_copy_data+0xc>
+
+00000032 <__do_clear_bss>:
+  32:	20 e0       	ldi	r18, 0x00	; 0
+  34:	aa e6       	ldi	r26, 0x6A	; 106
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	01 c0       	rjmp	.+2      	; 0x3c <.do_clear_bss_start>
+
+0000003a <.do_clear_bss_loop>:
+  3a:	1d 92       	st	X+, r1
+
+0000003c <.do_clear_bss_start>:
+  3c:	a0 38       	cpi	r26, 0x80	; 128
+  3e:	b2 07       	cpc	r27, r18
+  40:	e1 f7       	brne	.-8      	; 0x3a <.do_clear_bss_loop>
+  42:	29 d2       	rcall	.+1106   	; 0x496 <main>
+  44:	38 c2       	rjmp	.+1136   	; 0x4b6 <_exit>
+
+00000046 <__bad_interrupt>:
+  46:	dc cf       	rjmp	.-72     	; 0x0 <__vectors>
+
+00000048 <loadBrightness>:
+		loadBrightness();
+	}
+	
+	void loadBrightness()
+	{
+		if (mode == LEDA)
+  48:	80 91 68 00 	lds	r24, 0x0068
+  4c:	90 91 69 00 	lds	r25, 0x0069
+  50:	81 30       	cpi	r24, 0x01	; 1
+  52:	91 05       	cpc	r25, r1
+  54:	59 f4       	brne	.+22     	; 0x6c <loadBrightness+0x24>
+		{
+			OCR0A = brightnesses[brightness_a];
+  56:	e0 91 6e 00 	lds	r30, 0x006E
+  5a:	f0 91 6f 00 	lds	r31, 0x006F
+  5e:	ee 0f       	add	r30, r30
+  60:	ff 1f       	adc	r31, r31
+  62:	e0 5a       	subi	r30, 0xA0	; 160
+  64:	ff 4f       	sbci	r31, 0xFF	; 255
+  66:	80 81       	ld	r24, Z
+  68:	86 bf       	out	0x36, r24	; 54
+  6a:	08 95       	ret
+			
+		}
+		else if (mode == LEDB)
+  6c:	02 97       	sbiw	r24, 0x02	; 2
+  6e:	51 f4       	brne	.+20     	; 0x84 <loadBrightness+0x3c>
+		{
+			OCR0B = brightnesses[brightness_b];
+  70:	e0 91 6c 00 	lds	r30, 0x006C
+  74:	f0 91 6d 00 	lds	r31, 0x006D
+  78:	ee 0f       	add	r30, r30
+  7a:	ff 1f       	adc	r31, r31
+  7c:	e0 5a       	subi	r30, 0xA0	; 160
+  7e:	ff 4f       	sbci	r31, 0xFF	; 255
+  80:	80 81       	ld	r24, Z
+  82:	89 bd       	out	0x29, r24	; 41
+  84:	08 95       	ret
+
+00000086 <changeBrightness>:
+	
+	short brightnesses[] = {255, 128, 64, 10};
+	
+	void changeBrightness()
+	{
+		if (mode == LEDA)
+  86:	80 91 68 00 	lds	r24, 0x0068
+  8a:	90 91 69 00 	lds	r25, 0x0069
+  8e:	81 30       	cpi	r24, 0x01	; 1
+  90:	91 05       	cpc	r25, r1
+  92:	91 f4       	brne	.+36     	; 0xb8 <__stack+0x19>
+		{
+			brightness_a++;
+  94:	80 91 6e 00 	lds	r24, 0x006E
+  98:	90 91 6f 00 	lds	r25, 0x006F
+  9c:	01 96       	adiw	r24, 0x01	; 1
+			if (brightness_a > 3)
+  9e:	84 30       	cpi	r24, 0x04	; 4
+  a0:	91 05       	cpc	r25, r1
+  a2:	2c f4       	brge	.+10     	; 0xae <__stack+0xf>
+	
+	void changeBrightness()
+	{
+		if (mode == LEDA)
+		{
+			brightness_a++;
+  a4:	90 93 6f 00 	sts	0x006F, r25
+  a8:	80 93 6e 00 	sts	0x006E, r24
+  ac:	2d c0       	rjmp	.+90     	; 0x108 <__stack+0x69>
+			if (brightness_a > 3)
+				brightness_a = 0;
+  ae:	10 92 6f 00 	sts	0x006F, r1
+  b2:	10 92 6e 00 	sts	0x006E, r1
+  b6:	28 c0       	rjmp	.+80     	; 0x108 <__stack+0x69>
+		}
+		else if (mode == LEDB)
+  b8:	82 30       	cpi	r24, 0x02	; 2
+  ba:	91 05       	cpc	r25, r1
+  bc:	91 f4       	brne	.+36     	; 0xe2 <__stack+0x43>
+		{
+			brightness_b++;
+  be:	80 91 6c 00 	lds	r24, 0x006C
+  c2:	90 91 6d 00 	lds	r25, 0x006D
+  c6:	01 96       	adiw	r24, 0x01	; 1
+			if (brightness_b > 3)
+  c8:	84 30       	cpi	r24, 0x04	; 4
+  ca:	91 05       	cpc	r25, r1
+  cc:	2c f4       	brge	.+10     	; 0xd8 <__stack+0x39>
+			if (brightness_a > 3)
+				brightness_a = 0;
+		}
+		else if (mode == LEDB)
+		{
+			brightness_b++;
+  ce:	90 93 6d 00 	sts	0x006D, r25
+  d2:	80 93 6c 00 	sts	0x006C, r24
+  d6:	18 c0       	rjmp	.+48     	; 0x108 <__stack+0x69>
+			if (brightness_b > 3)
+				brightness_b = 0;				
+  d8:	10 92 6d 00 	sts	0x006D, r1
+  dc:	10 92 6c 00 	sts	0x006C, r1
+  e0:	13 c0       	rjmp	.+38     	; 0x108 <__stack+0x69>
+		}
+		else if (mode == LEDRED)
+  e2:	03 97       	sbiw	r24, 0x03	; 3
+  e4:	89 f4       	brne	.+34     	; 0x108 <__stack+0x69>
+		{
+			brightness_r++;
+  e6:	80 91 6a 00 	lds	r24, 0x006A
+  ea:	90 91 6b 00 	lds	r25, 0x006B
+  ee:	01 96       	adiw	r24, 0x01	; 1
+			if (brightness_r > 3)
+  f0:	84 30       	cpi	r24, 0x04	; 4
+  f2:	91 05       	cpc	r25, r1
+  f4:	2c f4       	brge	.+10     	; 0x100 <__stack+0x61>
+			if (brightness_b > 3)
+				brightness_b = 0;				
+		}
+		else if (mode == LEDRED)
+		{
+			brightness_r++;
+  f6:	90 93 6b 00 	sts	0x006B, r25
+  fa:	80 93 6a 00 	sts	0x006A, r24
+  fe:	04 c0       	rjmp	.+8      	; 0x108 <__stack+0x69>
+			if (brightness_r > 3)
+				brightness_r = 0;
+ 100:	10 92 6b 00 	sts	0x006B, r1
+ 104:	10 92 6a 00 	sts	0x006A, r1
+		}
+		loadBrightness();
+ 108:	9f df       	rcall	.-194    	; 0x48 <loadBrightness>
+ 10a:	08 95       	ret
+
+0000010c <loadLastBrightness>:
+		}
+	}
+	
+	void loadLastBrightness()
+	{
+		brightness_a = 3;
+ 10c:	83 e0       	ldi	r24, 0x03	; 3
+ 10e:	90 e0       	ldi	r25, 0x00	; 0
+ 110:	90 93 6f 00 	sts	0x006F, r25
+ 114:	80 93 6e 00 	sts	0x006E, r24
+		brightness_b = 3;
+ 118:	90 93 6d 00 	sts	0x006D, r25
+ 11c:	80 93 6c 00 	sts	0x006C, r24
+		brightness_r = 0;
+ 120:	10 92 6b 00 	sts	0x006B, r1
+ 124:	10 92 6a 00 	sts	0x006A, r1
+		loadBrightness();
+ 128:	8f df       	rcall	.-226    	; 0x48 <loadBrightness>
+ 12a:	08 95       	ret
+
+0000012c <enablePwm>:
+	
+		// pin configuration for pwm
+	
+		// DDR - set driver for OC0A and OC0B pins
+		// set pins as output
+		DDRB |= (1 << PIN_0);
+ 12c:	b8 9a       	sbi	0x17, 0	; 23
+		DDRB |= (1 << PIN_1);
+ 12e:	b9 9a       	sbi	0x17, 1	; 23
+		TCCR0B = TCCR0B | (1 << WGM02);
+		TCCR0A = TCCR0A | (1 << WGM01);
+		TCCR0A = TCCR0A | (1 << WGM00);
+		*/
+		// mode 3, Fast PWM
+		TCCR0B = TCCR0B & ~(1 << WGM02);
+ 130:	83 b7       	in	r24, 0x33	; 51
+ 132:	87 7f       	andi	r24, 0xF7	; 247
+ 134:	83 bf       	out	0x33, r24	; 51
+		TCCR0A = TCCR0A | (1 << WGM01);
+ 136:	8f b5       	in	r24, 0x2f	; 47
+ 138:	82 60       	ori	r24, 0x02	; 2
+ 13a:	8f bd       	out	0x2f, r24	; 47
+		TCCR0A = TCCR0A |(1 << WGM00);
+ 13c:	8f b5       	in	r24, 0x2f	; 47
+ 13e:	81 60       	ori	r24, 0x01	; 1
+ 140:	8f bd       	out	0x2f, r24	; 47
+		TCCR0B = TCCR0B | (1<<CS01);
+		TCCR0B = TCCR0B & ~(1<<CS00);
+		*/
+		
+		// clkio/1
+		TCCR0B &=~ (1<<CS02);
+ 142:	83 b7       	in	r24, 0x33	; 51
+ 144:	8b 7f       	andi	r24, 0xFB	; 251
+ 146:	83 bf       	out	0x33, r24	; 51
+		TCCR0B &=~ (1<<CS01);
+ 148:	83 b7       	in	r24, 0x33	; 51
+ 14a:	8d 7f       	andi	r24, 0xFD	; 253
+ 14c:	83 bf       	out	0x33, r24	; 51
+		TCCR0B |= (1<<CS00);
+ 14e:	83 b7       	in	r24, 0x33	; 51
+ 150:	81 60       	ori	r24, 0x01	; 1
+ 152:	83 bf       	out	0x33, r24	; 51
+		// TCNT0 -Timer/Counter Register
+		// direct access to register
+	
+		// OCR0A - Output Compare Register A
+		// top value
+		OCR0A = 255;
+ 154:	8f ef       	ldi	r24, 0xFF	; 255
+ 156:	86 bf       	out	0x36, r24	; 54
+	
+		// OCR0B - Output Compare Register B
+		OCR0B = 255;
+ 158:	89 bd       	out	0x29, r24	; 41
+ 15a:	08 95       	ret
+
+0000015c <initialize_app>:
+
+void initialize_app() 
+{
+	//setUsart();
+	
+	enablePwm();
+ 15c:	e7 df       	rcall	.-50     	; 0x12c <enablePwm>
+	
+	// enable interrupts for timer0
+	TIMSK0 |= (1 << TOIE0);
+ 15e:	89 b7       	in	r24, 0x39	; 57
+ 160:	82 60       	ori	r24, 0x02	; 2
+ 162:	89 bf       	out	0x39, r24	; 57
+	TIFR0 |= (1 << TOV0);
+ 164:	88 b7       	in	r24, 0x38	; 56
+ 166:	82 60       	ori	r24, 0x02	; 2
+ 168:	88 bf       	out	0x38, r24	; 56
+	
+	//************
+	// for checking presence of vcc
+	
+	// set pin as input
+	DDRB = DDRB & ~(1 << PIN_VCC);
+ 16a:	bb 98       	cbi	0x17, 3	; 23
+	
+	// enable pull up
+	//PORTB = PORTB | (1<<PIN_VCC);
+		
+	// disable pullup
+	PORTB &=~ (1<<PIN_VCC);
+ 16c:	c3 98       	cbi	0x18, 3	; 24
+
+	// enable PCINT0 pin for interrupt
+	PCMSK = PCMSK | (1<<PCINT3);
+ 16e:	ab 9a       	sbi	0x15, 3	; 21
+	
+	// enable PCINT7..0 pins
+	GIMSK = GIMSK | (1<<PCIE);
+ 170:	8b b7       	in	r24, 0x3b	; 59
+ 172:	80 62       	ori	r24, 0x20	; 32
+ 174:	8b bf       	out	0x3b, r24	; 59
+	
+	//************	
+	// start interrupt system
+	sei();
+ 176:	78 94       	sei
+ 178:	08 95       	ret
+
+0000017a <disableTimer>:
+	}
+	
+	void disableTimer()
+	{
+		// clkio/1
+		TCCR0B &=~ (1<<CS02);
+ 17a:	83 b7       	in	r24, 0x33	; 51
+ 17c:	8b 7f       	andi	r24, 0xFB	; 251
+ 17e:	83 bf       	out	0x33, r24	; 51
+		TCCR0B &=~ (1<<CS01);
+ 180:	83 b7       	in	r24, 0x33	; 51
+ 182:	8d 7f       	andi	r24, 0xFD	; 253
+ 184:	83 bf       	out	0x33, r24	; 51
+		TCCR0B &=~ (1<<CS00);
+ 186:	83 b7       	in	r24, 0x33	; 51
+ 188:	8e 7f       	andi	r24, 0xFE	; 254
+ 18a:	83 bf       	out	0x33, r24	; 51
+ 18c:	08 95       	ret
+
+0000018e <enableTimer>:
+	}
+	
+	void enableTimer()
+	{
+		// clkio/1
+		TCCR0B &=~ (1<<CS02);
+ 18e:	83 b7       	in	r24, 0x33	; 51
+ 190:	8b 7f       	andi	r24, 0xFB	; 251
+ 192:	83 bf       	out	0x33, r24	; 51
+		TCCR0B &=~ (1<<CS01);
+ 194:	83 b7       	in	r24, 0x33	; 51
+ 196:	8d 7f       	andi	r24, 0xFD	; 253
+ 198:	83 bf       	out	0x33, r24	; 51
+		TCCR0B |= (1<<CS00);
+ 19a:	83 b7       	in	r24, 0x33	; 51
+ 19c:	81 60       	ori	r24, 0x01	; 1
+ 19e:	83 bf       	out	0x33, r24	; 51
+ 1a0:	08 95       	ret
+
+000001a2 <__vector_2>:
+	
+
+	
+//ISR(PCINT_vect)
+ISR(PCINT0_vect)
+{
+ 1a2:	1f 92       	push	r1
+ 1a4:	0f 92       	push	r0
+ 1a6:	0f b6       	in	r0, 0x3f	; 63
+ 1a8:	0f 92       	push	r0
+ 1aa:	11 24       	eor	r1, r1
+ 1ac:	2f 93       	push	r18
+ 1ae:	3f 93       	push	r19
+ 1b0:	4f 93       	push	r20
+ 1b2:	5f 93       	push	r21
+ 1b4:	6f 93       	push	r22
+ 1b6:	7f 93       	push	r23
+ 1b8:	8f 93       	push	r24
+ 1ba:	9f 93       	push	r25
+ 1bc:	af 93       	push	r26
+ 1be:	bf 93       	push	r27
+ 1c0:	ef 93       	push	r30
+ 1c2:	ff 93       	push	r31
+	pcint3 = timeCounter;
+ 1c4:	80 91 7c 00 	lds	r24, 0x007C
+ 1c8:	90 91 7d 00 	lds	r25, 0x007D
+ 1cc:	a0 91 7e 00 	lds	r26, 0x007E
+ 1d0:	b0 91 7f 00 	lds	r27, 0x007F
+ 1d4:	80 93 72 00 	sts	0x0072, r24
+ 1d8:	90 93 73 00 	sts	0x0073, r25
+ 1dc:	a0 93 74 00 	sts	0x0074, r26
+ 1e0:	b0 93 75 00 	sts	0x0075, r27
+
+	// if this interrupt disabled idle state
+	if (MCUCR & (1 << SE)) 
+ 1e4:	05 b6       	in	r0, 0x35	; 53
+ 1e6:	05 fe       	sbrs	r0, 5
+ 1e8:	0a c0       	rjmp	.+20     	; 0x1fe <__vector_2+0x5c>
+	{
+		// disable idle state
+		MCUCR &=~ (1 << SE);
+ 1ea:	85 b7       	in	r24, 0x35	; 53
+ 1ec:	8f 7d       	andi	r24, 0xDF	; 223
+ 1ee:	85 bf       	out	0x35, r24	; 53
+			
+		enableTimer();
+ 1f0:	ce df       	rcall	.-100    	; 0x18e <enableTimer>
+		
+		// enable interrupts for timer0
+		TIMSK0 |= (1 << TOIE0);
+ 1f2:	89 b7       	in	r24, 0x39	; 57
+ 1f4:	82 60       	ori	r24, 0x02	; 2
+ 1f6:	89 bf       	out	0x39, r24	; 57
+		TIFR0 |= (1 << TOV0);
+ 1f8:	88 b7       	in	r24, 0x38	; 56
+ 1fa:	82 60       	ori	r24, 0x02	; 2
+ 1fc:	88 bf       	out	0x38, r24	; 56
+		
+	}
+}
+ 1fe:	ff 91       	pop	r31
+ 200:	ef 91       	pop	r30
+ 202:	bf 91       	pop	r27
+ 204:	af 91       	pop	r26
+ 206:	9f 91       	pop	r25
+ 208:	8f 91       	pop	r24
+ 20a:	7f 91       	pop	r23
+ 20c:	6f 91       	pop	r22
+ 20e:	5f 91       	pop	r21
+ 210:	4f 91       	pop	r20
+ 212:	3f 91       	pop	r19
+ 214:	2f 91       	pop	r18
+ 216:	0f 90       	pop	r0
+ 218:	0f be       	out	0x3f, r0	; 63
+ 21a:	0f 90       	pop	r0
+ 21c:	1f 90       	pop	r1
+ 21e:	18 95       	reti
+
+00000220 <disablePin0>:
+	}
+	
+	void disablePin0() 
+	{
+		// disconnect pin OC0A
+		TCCR0A &=~(1<<COM0A0);
+ 220:	8f b5       	in	r24, 0x2f	; 47
+ 222:	8f 7b       	andi	r24, 0xBF	; 191
+ 224:	8f bd       	out	0x2f, r24	; 47
+		TCCR0A &=~(1<<COM0A1);
+ 226:	8f b5       	in	r24, 0x2f	; 47
+ 228:	8f 77       	andi	r24, 0x7F	; 127
+ 22a:	8f bd       	out	0x2f, r24	; 47
+		
+		// disable pull up's
+		//DDRB &=~(1 << PIN_R);
+				
+		// set low state
+		PORTB &=~(1 << PIN_0);
+ 22c:	c0 98       	cbi	0x18, 0	; 24
+ 22e:	08 95       	ret
+
+00000230 <disablePin1>:
+	}
+	
+	void disablePin1()
+	{
+		// disconnect pin OC0B
+		TCCR0A &=~(1<<COM0B0);
+ 230:	8f b5       	in	r24, 0x2f	; 47
+ 232:	8f 7e       	andi	r24, 0xEF	; 239
+ 234:	8f bd       	out	0x2f, r24	; 47
+		TCCR0A &=~(1<<COM0B1);	
+ 236:	8f b5       	in	r24, 0x2f	; 47
+ 238:	8f 7d       	andi	r24, 0xDF	; 223
+ 23a:	8f bd       	out	0x2f, r24	; 47
+
+		// disable pull up's
+		//DDRD &=~(1 << PD5);
+
+		// set low state
+		PORTB &=~(1 << PIN_1);		
+ 23c:	c1 98       	cbi	0x18, 1	; 24
+ 23e:	08 95       	ret
+
+00000240 <enablePin0>:
+	}
+	
+	void enablePin0()
+	{
+		// connect pin OC0A
+		TCCR0A &=~(1<<COM0A0);
+ 240:	8f b5       	in	r24, 0x2f	; 47
+ 242:	8f 7b       	andi	r24, 0xBF	; 191
+ 244:	8f bd       	out	0x2f, r24	; 47
+		TCCR0A |=(1<<COM0A1);
+ 246:	8f b5       	in	r24, 0x2f	; 47
+ 248:	80 68       	ori	r24, 0x80	; 128
+ 24a:	8f bd       	out	0x2f, r24	; 47
+ 24c:	08 95       	ret
+
+0000024e <enablePin1>:
+	}
+	
+	void enablePin1()
+	{
+		// connect pin OC0B
+		TCCR0A &=~(1<<COM0B0);
+ 24e:	8f b5       	in	r24, 0x2f	; 47
+ 250:	8f 7e       	andi	r24, 0xEF	; 239
+ 252:	8f bd       	out	0x2f, r24	; 47
+		TCCR0A |= (1<<COM0B1);
+ 254:	8f b5       	in	r24, 0x2f	; 47
+ 256:	80 62       	ori	r24, 0x20	; 32
+ 258:	8f bd       	out	0x2f, r24	; 47
+ 25a:	08 95       	ret
+
+0000025c <enableRed>:
+	}
+	
+	void enableRed()
+	{
+		// set pins as output
+		DDRB = DDRB | (1 << PIN_R);
+ 25c:	ba 9a       	sbi	0x17, 2	; 23
+		    
+		// high state
+		PORTB = PORTB | (1 << PIN_R);
+ 25e:	c2 9a       	sbi	0x18, 2	; 24
+ 260:	08 95       	ret
+
+00000262 <disableRed>:
+	
+	void disableRed()
+	{
+		
+		// set pins as output
+		DDRB = DDRB | (1 << PIN_R);
+ 262:	ba 9a       	sbi	0x17, 2	; 23
+		    
+		// set low state
+		PORTB &=~(1 << PIN_R);
+ 264:	c2 98       	cbi	0x18, 2	; 24
+ 266:	08 95       	ret
+
+00000268 <disableLed>:
+		}
+	}
+	
+	void disableLed()
+	{
+		disablePin0();
+ 268:	db df       	rcall	.-74     	; 0x220 <disablePin0>
+		disablePin1();
+ 26a:	e2 df       	rcall	.-60     	; 0x230 <disablePin1>
+		disableRed();
+ 26c:	fa df       	rcall	.-12     	; 0x262 <disableRed>
+ 26e:	08 95       	ret
+
+00000270 <enableLed>:
+		enableLed();
+	}
+	
+	void enableLed()
+	{
+		if (mode == LEDA)
+ 270:	80 91 68 00 	lds	r24, 0x0068
+ 274:	90 91 69 00 	lds	r25, 0x0069
+ 278:	81 30       	cpi	r24, 0x01	; 1
+ 27a:	91 05       	cpc	r25, r1
+ 27c:	21 f4       	brne	.+8      	; 0x286 <enableLed+0x16>
+		{
+			enablePin0();
+ 27e:	e0 df       	rcall	.-64     	; 0x240 <enablePin0>
+			disablePin1();
+ 280:	d7 df       	rcall	.-82     	; 0x230 <disablePin1>
+			disableRed();
+ 282:	ef df       	rcall	.-34     	; 0x262 <disableRed>
+ 284:	08 95       	ret
+		}
+		else if (mode == LEDB)
+ 286:	82 30       	cpi	r24, 0x02	; 2
+ 288:	91 05       	cpc	r25, r1
+ 28a:	21 f4       	brne	.+8      	; 0x294 <enableLed+0x24>
+		{
+			disablePin0();
+ 28c:	c9 df       	rcall	.-110    	; 0x220 <disablePin0>
+			enablePin1();
+ 28e:	df df       	rcall	.-66     	; 0x24e <enablePin1>
+			disableRed();
+ 290:	e8 df       	rcall	.-48     	; 0x262 <disableRed>
+ 292:	08 95       	ret
+		}
+		else if (mode == LEDRED)
+ 294:	03 97       	sbiw	r24, 0x03	; 3
+ 296:	19 f4       	brne	.+6      	; 0x29e <enableLed+0x2e>
+		{
+			disablePin0();
+ 298:	c3 df       	rcall	.-122    	; 0x220 <disablePin0>
+			disablePin1();
+ 29a:	ca df       	rcall	.-108    	; 0x230 <disablePin1>
+			enableRed();
+ 29c:	df df       	rcall	.-66     	; 0x25c <enableRed>
+ 29e:	08 95       	ret
+
+000002a0 <changeMode>:
+		enableLed();
+	}
+	
+	void changeMode()
+	{
+		if (mode == LEDA)
+ 2a0:	80 91 68 00 	lds	r24, 0x0068
+ 2a4:	90 91 69 00 	lds	r25, 0x0069
+ 2a8:	81 30       	cpi	r24, 0x01	; 1
+ 2aa:	91 05       	cpc	r25, r1
+ 2ac:	39 f4       	brne	.+14     	; 0x2bc <changeMode+0x1c>
+			mode = LEDB;
+ 2ae:	82 e0       	ldi	r24, 0x02	; 2
+ 2b0:	90 e0       	ldi	r25, 0x00	; 0
+ 2b2:	90 93 69 00 	sts	0x0069, r25
+ 2b6:	80 93 68 00 	sts	0x0068, r24
+ 2ba:	12 c0       	rjmp	.+36     	; 0x2e0 <changeMode+0x40>
+		else if (mode == LEDB)
+ 2bc:	82 30       	cpi	r24, 0x02	; 2
+ 2be:	91 05       	cpc	r25, r1
+ 2c0:	39 f4       	brne	.+14     	; 0x2d0 <changeMode+0x30>
+		{
+			mode = LEDRED;
+ 2c2:	83 e0       	ldi	r24, 0x03	; 3
+ 2c4:	90 e0       	ldi	r25, 0x00	; 0
+ 2c6:	90 93 69 00 	sts	0x0069, r25
+ 2ca:	80 93 68 00 	sts	0x0068, r24
+ 2ce:	08 c0       	rjmp	.+16     	; 0x2e0 <changeMode+0x40>
+			//loadBrightness();
+		}
+		else if (mode == LEDRED)
+ 2d0:	03 97       	sbiw	r24, 0x03	; 3
+ 2d2:	31 f4       	brne	.+12     	; 0x2e0 <changeMode+0x40>
+			mode = LEDA;
+ 2d4:	81 e0       	ldi	r24, 0x01	; 1
+ 2d6:	90 e0       	ldi	r25, 0x00	; 0
+ 2d8:	90 93 69 00 	sts	0x0069, r25
+ 2dc:	80 93 68 00 	sts	0x0068, r24
+		
+		enableLed();
+ 2e0:	c7 df       	rcall	.-114    	; 0x270 <enableLed>
+ 2e2:	08 95       	ret
+
+000002e4 <__vector_3>:
+		disableRed();
+	}
+	
+//ISR(TIMER0_OVF_vect)
+ISR(TIM0_OVF_vect)
+{
+ 2e4:	1f 92       	push	r1
+ 2e6:	0f 92       	push	r0
+ 2e8:	0f b6       	in	r0, 0x3f	; 63
+ 2ea:	0f 92       	push	r0
+ 2ec:	11 24       	eor	r1, r1
+ 2ee:	2f 93       	push	r18
+ 2f0:	3f 93       	push	r19
+ 2f2:	4f 93       	push	r20
+ 2f4:	5f 93       	push	r21
+ 2f6:	6f 93       	push	r22
+ 2f8:	7f 93       	push	r23
+ 2fa:	8f 93       	push	r24
+ 2fc:	9f 93       	push	r25
+ 2fe:	af 93       	push	r26
+ 300:	bf 93       	push	r27
+ 302:	ef 93       	push	r30
+ 304:	ff 93       	push	r31
+	
+	// increment counters
+	timeCounter++;
+ 306:	80 91 7c 00 	lds	r24, 0x007C
+ 30a:	90 91 7d 00 	lds	r25, 0x007D
+ 30e:	a0 91 7e 00 	lds	r26, 0x007E
+ 312:	b0 91 7f 00 	lds	r27, 0x007F
+ 316:	01 96       	adiw	r24, 0x01	; 1
+ 318:	a1 1d       	adc	r26, r1
+ 31a:	b1 1d       	adc	r27, r1
+ 31c:	80 93 7c 00 	sts	0x007C, r24
+ 320:	90 93 7d 00 	sts	0x007D, r25
+ 324:	a0 93 7e 00 	sts	0x007E, r26
+ 328:	b0 93 7f 00 	sts	0x007F, r27
+	
+	// service of clicks
+	
+	if ((clicks == 1) && (timeCounter >= savedTime + (2 * MAXTIME))) 
+ 32c:	20 91 7a 00 	lds	r18, 0x007A
+ 330:	30 91 7b 00 	lds	r19, 0x007B
+ 334:	21 30       	cpi	r18, 0x01	; 1
+ 336:	31 05       	cpc	r19, r1
+ 338:	f9 f4       	brne	.+62     	; 0x378 <__vector_3+0x94>
+ 33a:	40 91 76 00 	lds	r20, 0x0076
+ 33e:	50 91 77 00 	lds	r21, 0x0077
+ 342:	60 91 78 00 	lds	r22, 0x0078
+ 346:	70 91 79 00 	lds	r23, 0x0079
+ 34a:	44 52       	subi	r20, 0x24	; 36
+ 34c:	5a 4f       	sbci	r21, 0xFA	; 250
+ 34e:	6f 4f       	sbci	r22, 0xFF	; 255
+ 350:	7f 4f       	sbci	r23, 0xFF	; 255
+ 352:	84 17       	cp	r24, r20
+ 354:	95 07       	cpc	r25, r21
+ 356:	a6 07       	cpc	r26, r22
+ 358:	b7 07       	cpc	r27, r23
+ 35a:	f4 f0       	brlt	.+60     	; 0x398 <__vector_3+0xb4>
+	//if (clicks == 1)
+	{
+		// wait one MAXTIME period to handle/service 1-clicks
+		
+		changeMode();
+ 35c:	a1 df       	rcall	.-190    	; 0x2a0 <changeMode>
+		
+		savedTime = 0;
+ 35e:	10 92 76 00 	sts	0x0076, r1
+ 362:	10 92 77 00 	sts	0x0077, r1
+ 366:	10 92 78 00 	sts	0x0078, r1
+ 36a:	10 92 79 00 	sts	0x0079, r1
+		
+			
+		clicks = 0;
+ 36e:	10 92 7b 00 	sts	0x007B, r1
+ 372:	10 92 7a 00 	sts	0x007A, r1
+ 376:	10 c0       	rjmp	.+32     	; 0x398 <__vector_3+0xb4>
+	} else if (clicks == 2) {
+ 378:	22 30       	cpi	r18, 0x02	; 2
+ 37a:	31 05       	cpc	r19, r1
+ 37c:	69 f4       	brne	.+26     	; 0x398 <__vector_3+0xb4>
+		// 2-click has to be taken immediately
+		
+		changeBrightness();
+ 37e:	83 de       	rcall	.-762    	; 0x86 <changeBrightness>
+		
+		savedTime = 0;
+ 380:	10 92 76 00 	sts	0x0076, r1
+ 384:	10 92 77 00 	sts	0x0077, r1
+ 388:	10 92 78 00 	sts	0x0078, r1
+ 38c:	10 92 79 00 	sts	0x0079, r1
+	
+		clicks = 0;		
+ 390:	10 92 7b 00 	sts	0x007B, r1
+ 394:	10 92 7a 00 	sts	0x007A, r1
+	*/
+
+	
+	//************
+	
+	if (pcint3 > 0 && timeCounter >= pcint3 + 100)
+ 398:	80 91 72 00 	lds	r24, 0x0072
+ 39c:	90 91 73 00 	lds	r25, 0x0073
+ 3a0:	a0 91 74 00 	lds	r26, 0x0074
+ 3a4:	b0 91 75 00 	lds	r27, 0x0075
+ 3a8:	18 16       	cp	r1, r24
+ 3aa:	19 06       	cpc	r1, r25
+ 3ac:	1a 06       	cpc	r1, r26
+ 3ae:	1b 06       	cpc	r1, r27
+ 3b0:	0c f0       	brlt	.+2      	; 0x3b4 <__vector_3+0xd0>
+ 3b2:	58 c0       	rjmp	.+176    	; 0x464 <__vector_3+0x180>
+ 3b4:	40 91 7c 00 	lds	r20, 0x007C
+ 3b8:	50 91 7d 00 	lds	r21, 0x007D
+ 3bc:	60 91 7e 00 	lds	r22, 0x007E
+ 3c0:	70 91 7f 00 	lds	r23, 0x007F
+ 3c4:	8c 59       	subi	r24, 0x9C	; 156
+ 3c6:	9f 4f       	sbci	r25, 0xFF	; 255
+ 3c8:	af 4f       	sbci	r26, 0xFF	; 255
+ 3ca:	bf 4f       	sbci	r27, 0xFF	; 255
+ 3cc:	48 17       	cp	r20, r24
+ 3ce:	59 07       	cpc	r21, r25
+ 3d0:	6a 07       	cpc	r22, r26
+ 3d2:	7b 07       	cpc	r23, r27
+ 3d4:	0c f4       	brge	.+2      	; 0x3d8 <__vector_3+0xf4>
+ 3d6:	46 c0       	rjmp	.+140    	; 0x464 <__vector_3+0x180>
+	{
+		pcint3 = 0;
+ 3d8:	10 92 72 00 	sts	0x0072, r1
+ 3dc:	10 92 73 00 	sts	0x0073, r1
+ 3e0:	10 92 74 00 	sts	0x0074, r1
+ 3e4:	10 92 75 00 	sts	0x0075, r1
+		
+		// if vcc detection on PIN_VCC
+		if (PINB & (1 << PIN_VCC))
+ 3e8:	b3 9b       	sbis	0x16, 3	; 22
+ 3ea:	27 c0       	rjmp	.+78     	; 0x43a <__vector_3+0x156>
+		{
+			//***
+			// first click
+			if (clicks == 0) 
+ 3ec:	80 91 7a 00 	lds	r24, 0x007A
+ 3f0:	90 91 7b 00 	lds	r25, 0x007B
+ 3f4:	00 97       	sbiw	r24, 0x00	; 0
+ 3f6:	79 f4       	brne	.+30     	; 0x416 <__vector_3+0x132>
+			{
+				clicks++;
+ 3f8:	81 e0       	ldi	r24, 0x01	; 1
+ 3fa:	90 e0       	ldi	r25, 0x00	; 0
+ 3fc:	90 93 7b 00 	sts	0x007B, r25
+ 400:	80 93 7a 00 	sts	0x007A, r24
+				savedTime = timeCounter;
+ 404:	40 93 76 00 	sts	0x0076, r20
+ 408:	50 93 77 00 	sts	0x0077, r21
+ 40c:	60 93 78 00 	sts	0x0078, r22
+ 410:	70 93 79 00 	sts	0x0079, r23
+ 414:	10 c0       	rjmp	.+32     	; 0x436 <__vector_3+0x152>
+			}
+			// next clicks
+			else if (clicks > 0) {
+ 416:	18 16       	cp	r1, r24
+ 418:	19 06       	cpc	r1, r25
+ 41a:	6c f4       	brge	.+26     	; 0x436 <__vector_3+0x152>
+				clicks++;
+ 41c:	01 96       	adiw	r24, 0x01	; 1
+ 41e:	90 93 7b 00 	sts	0x007B, r25
+ 422:	80 93 7a 00 	sts	0x007A, r24
+				savedTime = timeCounter;
+ 426:	40 93 76 00 	sts	0x0076, r20
+ 42a:	50 93 77 00 	sts	0x0077, r21
+ 42e:	60 93 78 00 	sts	0x0078, r22
+ 432:	70 93 79 00 	sts	0x0079, r23
+				
+			}
+		
+			enableLed();
+ 436:	1c df       	rcall	.-456    	; 0x270 <enableLed>
+ 438:	15 c0       	rjmp	.+42     	; 0x464 <__vector_3+0x180>
+			MCUCR &=~ (1 << SE);
+			*/
+		
+		
+		} 
+		else if ((PINB & (1 << PIN_VCC)) == 0)
+ 43a:	b3 99       	sbic	0x16, 3	; 22
+ 43c:	13 c0       	rjmp	.+38     	; 0x464 <__vector_3+0x180>
+		{
+			// vcc is missing
+		
+			disableLed();
+ 43e:	14 df       	rcall	.-472    	; 0x268 <disableLed>
+			TCCR0B = TCCR0B | (1<<CS01);
+			TCCR0B = TCCR0B | (1<<CS00);
+			*/
+			
+			
+			disableTimer();
+ 440:	9c de       	rcall	.-712    	; 0x17a <disableTimer>
+			
+			// disable interrupts for timer0
+			TIMSK0 &=~ (1 << TOIE0);
+ 442:	89 b7       	in	r24, 0x39	; 57
+ 444:	8d 7f       	andi	r24, 0xFD	; 253
+ 446:	89 bf       	out	0x39, r24	; 57
+			TIFR0 &=~ (1 << TOV0);
+ 448:	88 b7       	in	r24, 0x38	; 56
+ 44a:	8d 7f       	andi	r24, 0xFD	; 253
+ 44c:	88 bf       	out	0x38, r24	; 56
+			
+			// start interrupt system
+			sei();
+ 44e:	78 94       	sei
+		
+			// enable idle state
+			MCUCR |= (1 << SE);
+ 450:	85 b7       	in	r24, 0x35	; 53
+ 452:	80 62       	ori	r24, 0x20	; 32
+ 454:	85 bf       	out	0x35, r24	; 53
+			
+			// power down
+			MCUCR |= (1 << SM1);
+ 456:	85 b7       	in	r24, 0x35	; 53
+ 458:	80 61       	ori	r24, 0x10	; 16
+ 45a:	85 bf       	out	0x35, r24	; 53
+			MCUCR |= (1 << SM0);
+ 45c:	85 b7       	in	r24, 0x35	; 53
+ 45e:	88 60       	ori	r24, 0x08	; 8
+ 460:	85 bf       	out	0x35, r24	; 53
+			
+			// enter idle state
+			//asm ("sleep");
+			sleep_cpu();
+ 462:	88 95       	sleep
+		}
+	}
+}
+ 464:	ff 91       	pop	r31
+ 466:	ef 91       	pop	r30
+ 468:	bf 91       	pop	r27
+ 46a:	af 91       	pop	r26
+ 46c:	9f 91       	pop	r25
+ 46e:	8f 91       	pop	r24
+ 470:	7f 91       	pop	r23
+ 472:	6f 91       	pop	r22
+ 474:	5f 91       	pop	r21
+ 476:	4f 91       	pop	r20
+ 478:	3f 91       	pop	r19
+ 47a:	2f 91       	pop	r18
+ 47c:	0f 90       	pop	r0
+ 47e:	0f be       	out	0x3f, r0	; 63
+ 480:	0f 90       	pop	r0
+ 482:	1f 90       	pop	r1
+ 484:	18 95       	reti
+
+00000486 <loadLastMode>:
+		loadBrightness();
+	}
+		
+	void loadLastMode()
+	{
+		mode = LEDB;
+ 486:	82 e0       	ldi	r24, 0x02	; 2
+ 488:	90 e0       	ldi	r25, 0x00	; 0
+ 48a:	90 93 69 00 	sts	0x0069, r25
+ 48e:	80 93 68 00 	sts	0x0068, r24
+		enableLed();
+ 492:	ee de       	rcall	.-548    	; 0x270 <enableLed>
+ 494:	08 95       	ret
+
+00000496 <main>:
+short brightness_b = 0;
+short brightness_r = 0;
+
+int main()
+{
+	if (initialized == 0)
+ 496:	80 91 70 00 	lds	r24, 0x0070
+ 49a:	90 91 71 00 	lds	r25, 0x0071
+ 49e:	89 2b       	or	r24, r25
+ 4a0:	39 f4       	brne	.+14     	; 0x4b0 <main+0x1a>
+	{
+		initialize_app();
+ 4a2:	5c de       	rcall	.-840    	; 0x15c <initialize_app>
+		initialized = 1;
+ 4a4:	81 e0       	ldi	r24, 0x01	; 1
+ 4a6:	90 e0       	ldi	r25, 0x00	; 0
+ 4a8:	90 93 71 00 	sts	0x0071, r25
+ 4ac:	80 93 70 00 	sts	0x0070, r24
+	}	
+	
+	loadLastMode();
+ 4b0:	ea df       	rcall	.-44     	; 0x486 <loadLastMode>
+	loadLastBrightness();
+ 4b2:	2c de       	rcall	.-936    	; 0x10c <loadLastBrightness>
+ 4b4:	ff cf       	rjmp	.-2      	; 0x4b4 <main+0x1e>
+
+000004b6 <_exit>:
+ 4b6:	f8 94       	cli
+
+000004b8 <__stop_program>:
+ 4b8:	ff cf       	rjmp	.-2      	; 0x4b8 <__stop_program>
