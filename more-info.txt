@@ -1,0 +1,53 @@
+
+/****************************************************************************/
+
+Ain - a led module
+
+A simple power led module for Petzl Duo caving headlamp
+Introduction
+
+Petzl Duo is a bit old but still very good headlamp produced by Petzl company. But in 2014 year it was equipped with an outdated bulb and a very simple light module with 5 led diodes. There are very good market solutions which can replace old modules with a modern source of light. But I wanted to create such solution myself, just as a hobby project.
+
+Why to choose Petzl Duo? There are so many good headlamps on the market. But Petzl Duo has very nice feature - it is very flexible because it allows modules with light source to be changed. So there is possible to put there any module one may dream of. Modern light modules are usually computer systems. So there is freedom in programming them up to programmer's taste and fun.
+
+This is a removable module. It can be easily removed for a check or for a replacement. No need to use a screwdriver or other tool.
+Power leds
+
+It contains 2 power leds. There are used Cree XP-G power leds. First power led is equipped with Ledil Tina-RS (real spot) 15 degrees lens for a focused beam of light. Second power led uses Ledil Tina-D 20 degrees lens for an ambient light. Every led has 3 levels of light intensity.
+
+Cree XP-G is a high power led. There are many color versions. Most of sensitivity of eyes lies in yellow light. But typical XP-G power led is weak in this part of light spectrum. So neutral white version of these diodes was used (3700-5000 K).
+
+There is third lens. It is Tina-M (30 degrees). It is used for very weak night red light. The light is emitted by 2 pieces of red light 0805 led diodes. The purpose of this third light was to create ability to see in complete darkness and being not seen by others. The rods in the eye are not very sensitive to red light above 640 nm. Most red leds has output of 625-640 nm. So weak light should not be visible from greater distance. To prevent seeing the lens (which is always seen very well) it is enough just to lower the housing of headlamp.
+
+The power leds are powered by one AMC7135 driver each. It provides about 340mA of current to each power diode. Drivers are controlled by an ATtiny13a microcontroller. It is a 8-bit AVR processor with just 1k of a flash memory for a program and 64 bytes of RAM. The 2 power leds has 3 levels of brightness. Pulse width modulation techique (PWM) is used for changing brightness of leds.
+The module inside Petzl Duo headlamp on Rock Helmets Combi helmet
+Special feature
+
+A special feature is used to change light modes. The headlamp allows only turning on and off light. So to remember current mode there was need to add backup power source to save contents of memory of the microcontroller. It was put in power-down mode. So it was enough to use 10uF capacitor to protect its memory.
+
+The single sided pcb was developed in Eagle software. It has approximate size 46x33 mm. 
+Noted problems
+
+1. Because of heat dissipation problems, it was used just one AMC7135 driver. The headlamp is closed tightly because it is waterproof up to 5 meters of depth. So it is difficult to add a radiator to outside of headlamp housing.
+
+2. The pcb contained an isp 6 pin connector for easy programming with an additional programmer. Unfortunately, it was soldered in non-standard way and after some programming attempts the connector was broken.
+
+There can be done many improvements but there are the really needed ones 
+
+    Better quality pcb! :)
+    It is better to use double sided pcb and thermal design from Cree XP-G datasheet.
+    Add S.O.S. and quick/slow blinking additional modes
+
+ 
+The module inside of headlamp housing
+
+ 
+
+
+Note: This is just a hobby project. I am not connected in any way with Petzl company.
+
+
+2014-2020 Erik Kos
+
+/****************************************************************************/
+

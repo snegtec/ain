@@ -6,12 +6,12 @@
 * Note: This is just a hobby project. I am not connected in any way with 
 * Petzl company.
 * 
-* version: 0.1 (March 2014)
-* author: Jacek Szymoniak
+* version: 0.1 (November 2020)
+* author: Erik Kos
 *          snegtec.com
 *          snegtec@outlook.com
 * 
-* Copyright (C) 2014-2016 Jacek Szymoniak
+* Copyright (C) 2014-2016 Erik Kos
 * 
 * License:
 *   application, source code - GNU General Public License

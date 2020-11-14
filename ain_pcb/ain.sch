@@ -9396,7 +9396,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <sheets>
 <sheet>
 <plain>
-<text x="165.1" y="25.4" size="2.794" layer="94">Copyright (C) 2014-2016 Jacek Szymoniak
+<text x="165.1" y="25.4" size="2.794" layer="94">Copyright (C) 2014-2020 Erik Kos
 License: Creative Commons Attribution-ShareAlike 4.0</text>
 </plain>
 <instances>
